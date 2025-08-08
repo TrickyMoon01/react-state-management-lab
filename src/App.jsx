@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState } from "react";
 
 const App = () => {
   const [team, setTeam] = useState([]);
@@ -89,7 +89,7 @@ const App = () => {
   function handleAddFighter(fighter) {
     if (money >= fighter.price) {
       setTeam([...team, fighter]);
-      setZombieFighters(zombieFighters.filter(f => f.id !== fighter.id));
+      setZombieFighters(zombieFighters.filter((f) => f.id !== fighter.id));
       setMoney(money - fighter.price);
       console.log("Team", [...team, fighter]);
     } else {
@@ -98,27 +98,34 @@ const App = () => {
   }
 
   function handleRemoveFighter(fighter) {
-    setTeam(team.filter(f => f.id !== fighter.id));
+    setTeam(team.filter((f) => f.id !== fighter.id));
     setZombieFighters([...zombieFighters, fighter]);
     setMoney(money + fighter.price);
   }
 
-  const totalStrength = team.reduce((sum, fighter) => sum + fighter.strength, 0);
+  const totalStrength = team.reduce(
+    (sum, fighter) => sum + fighter.strength,
+    0
+  );
   const totalAgility = team.reduce((sum, fighter) => sum + fighter.agility, 0);
 
   return (
-    <div style={{
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center"
-    }}> 
-      <h2>Zombie Fighters</h2> 
-      <div style={{
-        fontSize: "24px",
-        fontWeight: "bold",
-        marginBottom: "20px",
-        color: "#2d5a2d"
-      }}>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
+      <h2>Zombie Fighters</h2>
+      <div
+        style={{
+          fontSize: "24px",
+          fontWeight: "bold",
+          marginBottom: "20px",
+          color: "#2d5a2d",
+        }}
+      >
         Money: ${money}
       </div>
 
@@ -128,24 +135,32 @@ const App = () => {
           <p>Pick some team members!</p>
         ) : (
           <>
-            <div style={{
-              display: "flex",
-              justifyContent: "space-around",
-              marginBottom: "20px",
-              backgroundColor: "#f0f0f0",
-              padding: "10px",
-              borderRadius: "8px",
-              color: "#000000ff"
-            }}>
-              <div><strong>Total Strength: {totalStrength}</strong></div>
-              <div><strong>Total Agility: {totalAgility}</strong></div>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-around",
+                marginBottom: "20px",
+                backgroundColor: "#f0f0f0",
+                padding: "10px",
+                borderRadius: "8px",
+                color: "#000000ff",
+              }}
+            >
+              <div>
+                <strong>Total Strength: {totalStrength}</strong>
+              </div>
+              <div>
+                <strong>Total Agility: {totalAgility}</strong>
+              </div>
             </div>
-            <div style={{
-              display: "flex", 
-              flexWrap: "wrap", 
-              gap: "20px", 
-              justifyContent: "center"
-            }}>
+            <div
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                gap: "20px",
+                justifyContent: "center",
+              }}
+            >
               {team.map((fighter) => (
                 <div
                   key={fighter.id}
@@ -162,15 +177,15 @@ const App = () => {
                     src={fighter.img}
                     alt={fighter.name}
                     style={{
-                      width: "100px", 
-                      height: "100px"
+                      width: "100px",
+                      height: "100px",
                     }}
                   />
                   <h3>{fighter.name}</h3>
                   <p>Price: ${fighter.price}</p>
                   <p>Strength: {fighter.strength}</p>
                   <p>Agility: {fighter.agility}</p>
-                  <button 
+                  <button
                     onClick={() => handleRemoveFighter(fighter)}
                     style={{
                       padding: "8px 16px",
@@ -178,7 +193,7 @@ const App = () => {
                       color: "white",
                       border: "none",
                       borderRadius: "4px",
-                      cursor: "pointer"
+                      cursor: "pointer",
                     }}
                   >
                     Remove
@@ -192,12 +207,14 @@ const App = () => {
 
       <div style={{ width: "100%" }}>
         <h3>Available Fighters</h3>
-        <div style={{
-          display: "flex", 
-          flexWrap: "wrap", 
-          gap: "20px", 
-          justifyContent: "center"
-        }}>
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            gap: "20px",
+            justifyContent: "center",
+          }}
+        >
           {zombieFighters.map((fighter) => (
             <div
               key={fighter.id}
@@ -214,15 +231,15 @@ const App = () => {
                 src={fighter.img}
                 alt={fighter.name}
                 style={{
-                  width: "100px", 
-                  height: "100px"
+                  width: "100px",
+                  height: "100px",
                 }}
               />
               <h3>{fighter.name}</h3>
               <p>Price: ${fighter.price}</p>
               <p>Strength: {fighter.strength}</p>
               <p>Agility: {fighter.agility}</p>
-              <button 
+              <button
                 onClick={() => handleAddFighter(fighter)}
                 disabled={money < fighter.price}
                 style={{
@@ -231,7 +248,7 @@ const App = () => {
                   color: "white",
                   border: "none",
                   borderRadius: "4px",
-                  cursor: money >= fighter.price ? "pointer" : "not-allowed"
+                  cursor: money >= fighter.price ? "pointer" : "not-allowed",
                 }}
               >
                 {money >= fighter.price ? "Add to Team" : "Can't Afford"}
@@ -241,7 +258,7 @@ const App = () => {
         </div>
       </div>
     </div>
-  )
+  );
 };
 
 export default App;
