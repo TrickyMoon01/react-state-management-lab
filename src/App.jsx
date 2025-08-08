@@ -1,8 +1,9 @@
+import { useState } from 'react';
 
 const App = () => {
-  const team = [];
-  const money = 100;
-  const zombieFighters = [
+  const [team, setTeam] = useState([]);
+  const [money, setMoney] = useState(100);
+  const [zombieFighters, setZombieFighters] = useState([
     {
       id: 1,
       name: "Survivor",
@@ -83,68 +84,163 @@ const App = () => {
       agility: 6,
       img: "https://pages.git.generalassemb.ly/modular-curriculum-all-courses/react-state-management-lab/assets/e41f26.png",
     },
-  ];
+  ]);
 
-  function addToTeam(fighter){
-    team.push(fighter);
-    console.log("Team" , team)
+  function handleAddFighter(fighter) {
+    if (money >= fighter.price) {
+      setTeam([...team, fighter]);
+      setZombieFighters(zombieFighters.filter(f => f.id !== fighter.id));
+      setMoney(money - fighter.price);
+      console.log("Team", [...team, fighter]);
+    } else {
+      console.log("Not enough money");
+    }
   }
 
-  
+  function handleRemoveFighter(fighter) {
+    setTeam(team.filter(f => f.id !== fighter.id));
+    setZombieFighters([...zombieFighters, fighter]);
+    setMoney(money + fighter.price);
+  }
+
+  const totalStrength = team.reduce((sum, fighter) => sum + fighter.strength, 0);
+  const totalAgility = team.reduce((sum, fighter) => sum + fighter.agility, 0);
+
   return (
-    <div style ={{
-      
+    <div style={{
       display: "flex",
       flexDirection: "column",
       alignItems: "center"
     }}> 
-
       <h2>Zombie Fighters</h2> 
       <div style={{
+        fontSize: "24px",
+        fontWeight: "bold",
+        marginBottom: "20px",
+        color: "#2d5a2d"
+      }}>
+        Money: ${money}
+      </div>
+
+      <div style={{ width: "100%", maxWidth: "1200px", marginBottom: "40px" }}>
+        <h3>Your Team</h3>
+        {team.length === 0 ? (
+          <p>Pick some team members!</p>
+        ) : (
+          <>
+            <div style={{
+              display: "flex",
+              justifyContent: "space-around",
+              marginBottom: "20px",
+              backgroundColor: "#f0f0f0",
+              padding: "10px",
+              borderRadius: "8px",
+              color: "#000000ff"
+            }}>
+              <div><strong>Total Strength: {totalStrength}</strong></div>
+              <div><strong>Total Agility: {totalAgility}</strong></div>
+            </div>
+            <div style={{
+              display: "flex", 
+              flexWrap: "wrap", 
+              gap: "20px", 
+              justifyContent: "center"
+            }}>
+              {team.map((fighter) => (
+                <div
+                  key={fighter.id}
+                  style={{
+                    border: "1px solid #ccc",
+                    borderRadius: "8px",
+                    padding: "10px",
+                    width: "200px",
+                    textAlign: "center",
+                    backgroundColor: "#4f7d4f",
+                  }}
+                >
+                  <img
+                    src={fighter.img}
+                    alt={fighter.name}
+                    style={{
+                      width: "100px", 
+                      height: "100px"
+                    }}
+                  />
+                  <h3>{fighter.name}</h3>
+                  <p>Price: ${fighter.price}</p>
+                  <p>Strength: {fighter.strength}</p>
+                  <p>Agility: {fighter.agility}</p>
+                  <button 
+                    onClick={() => handleRemoveFighter(fighter)}
+                    style={{
+                      padding: "8px 16px",
+                      backgroundColor: "#f44336",
+                      color: "white",
+                      border: "none",
+                      borderRadius: "4px",
+                      cursor: "pointer"
+                    }}
+                  >
+                    Remove
+                  </button>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+      </div>
+
+      <div style={{ width: "100%" }}>
+        <h3>Available Fighters</h3>
+        <div style={{
           display: "flex", 
           flexWrap: "wrap", 
           gap: "20px", 
           justifyContent: "center"
         }}>
-
-        {zombieFighters.map((fighter) => (
-          <div
-            key={fighter.id}
-            style={{
-              border: "1px solid #ccc",
-              borderRadius: "8px",
-              padding: "10px",
-              width: "200px",
-              textAlign: "center",
-              backgroundColor: "#7d4f4fff",
-            }}
-          >
-            <img
-              src={fighter.img}
-              alt={fighter.name}
+          {zombieFighters.map((fighter) => (
+            <div
+              key={fighter.id}
               style={{
-                width: "100px", height: "100px"
+                border: "1px solid #ccc",
+                borderRadius: "8px",
+                padding: "10px",
+                width: "200px",
+                textAlign: "center",
+                backgroundColor: "#7d4f4fff",
               }}
-            />
-            <h2>{fighter.name}</h2>
-            <p>Price: ${fighter.price}</p>
-            <p>Strength: {fighter.strength}</p>
-            <p>Agility: {fighter.agility}</p>
-            <button 
-              onClick={
-                () => addToTeam(fighter)
-              }
-            ></button>
-
-          </div>
-        )
-
-        )}
+            >
+              <img
+                src={fighter.img}
+                alt={fighter.name}
+                style={{
+                  width: "100px", 
+                  height: "100px"
+                }}
+              />
+              <h3>{fighter.name}</h3>
+              <p>Price: ${fighter.price}</p>
+              <p>Strength: {fighter.strength}</p>
+              <p>Agility: {fighter.agility}</p>
+              <button 
+                onClick={() => handleAddFighter(fighter)}
+                disabled={money < fighter.price}
+                style={{
+                  padding: "8px 16px",
+                  backgroundColor: money >= fighter.price ? "#4CAF50" : "#ccc",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "4px",
+                  cursor: money >= fighter.price ? "pointer" : "not-allowed"
+                }}
+              >
+                {money >= fighter.price ? "Add to Team" : "Can't Afford"}
+              </button>
+            </div>
+          ))}
+        </div>
       </div>
-
-
     </div>
-
   )
 };
 
